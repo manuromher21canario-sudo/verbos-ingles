@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irregular Verbs · Caras 1 y 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: una ficha de clase — cabecera, selector de grupo y modo, y la tabla de verbos como hoja rayada con la tinta azul del bolígrafo */
+:root {
+  --paper: #fbfcfe;
+  --sheet: #ffffff;
+  --rule: #dbe3ee;
+  --ink: #1b2433;
+  --muted: #5d6b80;
+  --pen: #1f4fd1;
+  --pen-soft: #e6edff;
+  --ok: #157a43;
+  --ok-soft: #e2f5ea;
+  --bad: #c0352b;
+  --bad-soft: #fde8e6;
+  --cover: #e9eef6;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-hand: "Caveat", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10141c; --sheet: #171d28; --rule: #2a3445; --ink: #e8edf5; --muted: #9aa7bb;
+    --pen: #8fb0ff; --pen-soft: #1f2b47; --ok: #5fd394; --ok-soft: #173325; --bad: #ff8a7e; --bad-soft: #3a1f1d; --cover: #232c3b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10141c; --sheet: #171d28; --rule: #2a3445; --ink: #e8edf5; --muted: #9aa7bb;
+  --pen: #8fb0ff; --pen-soft: #1f2b47; --ok: #5fd394; --ok-soft: #173325; --bad: #ff8a7e; --bad-soft: #3a1f1d; --cover: #232c3b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 16px/1.5 var(--f-body); }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+h1 { font: 800 clamp(30px, 6vw, 44px)/1.05 var(--f-display); margin: 0; text-wrap: balance; }
+h1 span { color: var(--pen); }
+.lead { margin: 0; color: var(--muted); max-width: 62ch; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.seg { display: inline-flex; border: 1.5px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--sheet); }
+.seg button { font: 700 14px var(--f-body); color: var(--muted); background: none; border: 0; padding: 8px 14px; cursor: pointer; }
+.seg button + button { border-left: 1.5px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--pen); color: var(--sheet); }
+.seg button:focus-visible, .btn:focus-visible, td.en:focus-visible, input:focus-visible { outline: 3px solid var(--pen); outline-offset: 2px; }
+.label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-right: 8px; }
+
+.tip { background: var(--pen-soft); border-radius: 10px; padding: 12px 16px; display: grid; gap: 4px; }
+.tip b { font-family: var(--f-display); font-size: 15px; }
+.tip p { margin: 0; }
+
+.sheet { background: var(--sheet); border: 1.5px solid var(--rule); border-radius: 12px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+th { text-align: left; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 2px solid var(--rule); }
+td { padding: 8px 14px; border-bottom: 1px solid var(--rule); vertical-align: middle; height: 52px; }
+tr:last-child td { border-bottom: 0; }
+td.es { font-weight: 700; width: 28%; }
+td.es small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+td.en { font: 600 26px/1 var(--f-hand); color: var(--pen); }
+.covered td.en { cursor: pointer; }
+.covered td.en .word { visibility: hidden; }
+.covered td.en { background: repeating-linear-gradient(-45deg, var(--cover) 0 8px, transparent 8px 16px); }
+.covered td.en.shown { background: none; }
+.covered td.en.shown .word { visibility: visible; }
+
+td input { width: 100%; font: 600 24px/1 var(--f-hand); color: var(--pen); background: transparent; border: 0; border-bottom: 2px dashed var(--rule); padding: 4px 2px; }
+td input.right { border-bottom-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+td input.wrong { border-bottom-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.fix { display: block; font: 600 20px/1.1 var(--f-hand); color: var(--ok); margin-top: 2px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: 700 15px var(--f-body); border-radius: 10px; padding: 10px 18px; cursor: pointer; border: 1.5px solid var(--pen); background: var(--sheet); color: var(--pen); }
+.btn.primary { background: var(--pen); color: var(--sheet); }
+.score { font: 800 20px var(--f-display); font-variant-numeric: tabular-nums; }
+.score.good { color: var(--ok); }
+.score.meh { color: var(--bad); }
+
+.traps { display: grid; gap: 8px; }
+.traps h2 { font: 800 20px var(--f-display); margin: 0; }
+.traps ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.traps em { font: 600 21px var(--f-hand); color: var(--pen); font-style: normal; }
+@media (prefers-reduced-motion: no-preference) { td input, .btn { transition: background .15s, border-color .15s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Inglés · cara 1 aprobada con un 10 · cara 2 el viernes 16 de octubre</div>
+    <h1>Irregular verbs <span>cara 1 y 2</span></h1>
+    <p class="lead">En el examen te dan el español y tienes que escribir las tres formas en inglés: infinitivo, past simple y past participle.</p>
+  </header>
+
+  <div class="controls">
+    <div><span class="label">Cara</span>
+      <div class="seg" id="sides">
+        <button id="s-1" data-s="1" aria-pressed="false">1</button>
+        <button id="s-2" data-s="2" aria-pressed="true">2</button>
+        <button id="s-both" data-s="both" aria-pressed="false">Las dos</button>
+      </div>
+    </div>
+    <div><span class="label">Grupo</span>
+      <div class="seg" id="groups">
+        <button id="g-all" data-g="all" aria-pressed="true">Todos (25)</button>
+        <button id="g-A" data-g="A" aria-pressed="false">A</button>
+        <button id="g-B" data-g="B" aria-pressed="false">B</button>
+        <button id="g-C" data-g="C" aria-pressed="false">C</button>
+      </div>
+    </div>
+    <div><span class="label">Modo</span>
+      <div class="seg" id="modes">
+        <button id="m-study" data-m="study" aria-pressed="true">Estudiar</button>
+        <button id="m-cover" data-m="cover" aria-pressed="false">Tapar inglés</button>
+        <button id="m-exam" data-m="exam" aria-pressed="false">Examen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip" id="tip"></div>
+
+  <div class="sheet">
+    <table>
+      <thead><tr><th>Español</th><th>Infinitive</th><th>Past simple</th><th>Past participle</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="actions" id="actions"></div>
+
+  <section class="traps">
+    <h2>Ojo con cómo se escriben</h2>
+    <ul>
+      <li><em>brought, bought, fought</em> llevan <b>o</b>; <em>caught</em> lleva <b>a</b>.</li>
+      <li><em>forgotten</em> lleva <b>doble t</b>.</li>
+      <li>No confundas <em>fell</em> (caer) con <em>felt</em> (sentir).</li>
+      <li><em>chose</em> es el pasado y <em>chosen</em> el participio.</li>
+      <li><em>be</em> tiene dos pasados: escribe <b>was/were</b>.</li>
+      <li><em>begin, drink</em> van <b>i → a → u</b>: began/begun, drank/drunk.</li>
+      <li>El pasado de <em>shake</em> es <b>shook</b>, no "sheak".</li>
+      <li><em>written</em> lleva <b>doble t</b>, igual que forgotten.</li>
+      <li><em>wake up</em> lleva el <b>up</b> en las tres formas: woke up, woken up.</li>
+      <li>No confundas <em>taught</em> (enseñar) con <em>thought</em> (pensar).</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+// Cada verbo: [cara, grupo, español, infinitive, past simple, past participle]
+const VERBS = [
+  // Cara 1 · Grupo A: pasado y participio iguales
+  ["1", "A", "traer", "bring", "brought", "brought"],
+  ["1", "A", "comprar", "buy", "bought", "bought"],
+  ["1", "A", "pelear", "fight", "fought", "fought"],
+  ["1", "A", "atrapar", "catch", "caught", "caught"],
+  ["1", "A", "sentir", "feel", "felt", "felt"],
+  ["1", "A", "encontrar", "find", "found", "found"],
+  ["1", "A", "tener", "have", "had", "had"],
+  ["1", "A", "conseguir", "get", "got", "got"],
+  ["1", "A", "cortar", "cut", "cut", "cut"],
+  // Cara 1 · Grupo B: el participio acaba en -en
+  ["1", "B", "romper", "break", "broke", "broken"],
+  ["1", "B", "elegir", "choose", "chose", "chosen"],
+  ["1", "B", "conducir", "drive", "drove", "driven"],
+  ["1", "B", "comer", "eat", "ate", "eaten"],
+  ["1", "B", "caer", "fall", "fell", "fallen"],
+  ["1", "B", "olvidar", "forget", "forgot", "forgotten"],
+  ["1", "B", "perdonar", "forgive", "forgave", "forgiven"],
+  ["1", "B", "dar", "give", "gave", "given"],
+  // Cara 1 · Grupo C: cambian la vocal o son raros
+  ["1", "C", "comenzar", "begin", "began", "begun"],
+  ["1", "C", "beber", "drink", "drank", "drunk"],
+  ["1", "C", "volar", "fly", "flew", "flown"],
+  ["1", "C", "venir", "come", "came", "come"],
+  ["1", "C", "llegar a ser", "become", "became", "become"],
+  ["1", "C", "ser / estar", "be", "was/were", "been"],
+  ["1", "C", "hacer", "do", "did", "done"],
+  ["1", "C", "ir", "go", "went", "gone"],
+  // Cara 2 · Grupo A: pasado y participio iguales
+  ["2", "A", "guardar / mantener", "keep", "kept", "kept"],
+  ["2", "A", "dormir", "sleep", "slept", "slept"],
+  ["2", "A", "irse / marcharse", "leave", "left", "left"],
+  ["2", "A", "perder", "lose", "lost", "lost"],
+  ["2", "A", "conocer / encontrarse", "meet", "met", "met"],
+  ["2", "A", "hacer / fabricar", "make", "made", "made"],
+  ["2", "A", "leer", "read", "read", "read"],
+  ["2", "A", "vender", "sell", "sold", "sold"],
+  ["2", "A", "contar", "tell", "told", "told"],
+  ["2", "A", "enseñar", "teach", "taught", "taught"],
+  ["2", "A", "pensar", "think", "thought", "thought"],
+  ["2", "A", "entender", "understand", "understood", "understood"],
+  // Cara 2 · Grupo B: el participio acaba en -n o -en
+  ["2", "B", "saber", "know", "knew", "known"],
+  ["2", "B", "lanzar", "throw", "threw", "thrown"],
+  ["2", "B", "ver", "see", "saw", "seen"],
+  ["2", "B", "llevar puesto", "wear", "wore", "worn"],
+  ["2", "B", "hablar", "speak", "spoke", "spoken"],
+  ["2", "B", "levantarse", "wake up", "woke up", "woken up"],
+  ["2", "B", "elevar", "rise", "rose", "risen"],
+  ["2", "B", "escribir", "write", "wrote", "written"],
+  ["2", "B", "coger / tomar", "take", "took", "taken"],
+  ["2", "B", "agitar", "shake", "shook", "shaken"],
+  // Cara 2 · Grupo C: la vocal cambia i → a → u
+  ["2", "C", "llamar", "ring", "rang", "rung"],
+  ["2", "C", "cantar", "sing", "sang", "sung"],
+  ["2", "C", "nadar", "swim", "swam", "swum"],
+];
+
+const TIPS = {
+  "1": {
+    all: ["Los 25 verbos de la cara 1", "Empieza por grupos. Cuando te sepas los tres, practica con todos mezclados en modo Examen."],
+    A: ["Grupo A · pasado y participio son iguales", "Solo aprendes una forma nueva. bring, buy y fight acaban en -ought; catch en -aught. cut no cambia nunca."],
+    B: ["Grupo B · el participio acaba en -en", "Muchos son el pasado + n: broke → broken, chose → chosen, forgot → forgotten."],
+    C: ["Grupo C · cambian la vocal o son raros", "begin y drink van i → a → u. come y become vuelven al principio. be, do y go hay que aprenderlos tal cual."],
+  },
+  "2": {
+    all: ["Los 25 verbos de la cara 2", "Empieza por grupos. Cuando te sepas los tres, practica con todos mezclados en modo Examen."],
+    A: ["Grupo A · pasado y participio son iguales", "Solo aprendes una forma nueva. keep, sleep, leave, lose, meet acaban en -t. teach y think van en -ought/-aught. read se escribe igual pero en pasado suena \"red\"."],
+    B: ["Grupo B · el participio acaba en -n o -en", "know, throw → knew, threw → known, thrown. speak, wake, write, take, shake: el participio es el pasado (o el infinitivo) + n."],
+    C: ["Grupo C · la vocal cambia i → a → u", "ring, rang, rung. sing, sang, sung. swim, swam, swum. Si te sabes uno, te sabes los tres."],
+  },
+  both: {
+    all: ["Los 50 verbos de las dos caras", "Repaso total. Usa el modo Examen con el orden mezclado para ver qué verbos se te escapan."],
+    A: ["Grupo A de las dos caras", "Pasado y participio iguales: solo una forma nueva por verbo."],
+    B: ["Grupo B de las dos caras", "El participio acaba en -n o -en: broken, chosen, spoken, written, known…"],
+    C: ["Grupo C de las dos caras", "Cambios de vocal (begin, drink, ring, sing, swim van i → a → u) y los raros de la cara 1."],
+  },
+};
+
+let side = "2";
+let group = "all";
+let mode = "study";
+let order = VERBS.map((_, i) => i);
+
+const rowsEl = document.getElementById("rows");
+const tableEl = document.querySelector("table");
+const actionsEl = document.getElementById("actions");
+const tipEl = document.getElementById("tip");
+
+const norm = s => s.toLowerCase().replace(/[’']/g, "").replace(/\s*[\/,]\s*/g, "/").replace(/\s+/g, " ").trim();
+
+function visible() {
+  return order.filter(i =>
+    (side === "both" || VERBS[i][0] === side) &&
+    (group === "all" || VERBS[i][1] === group));
+}
+
+function render() {
+  const [title, text] = TIPS[side][group];
+  tipEl.innerHTML = `<b>${title}</b><p>${text}</p>`;
+  document.getElementById("g-all").textContent = `Todos (${side === "both" ? 50 : 25})`;
+  tableEl.classList.toggle("covered", mode === "cover");
+  rowsEl.innerHTML = "";
+  for (const i of visible()) {
+    const [, , es, ...en] = VERBS[i];
+    const tr = document.createElement("tr");
+    let html = `<td class="es">${es}</td>`;
+    en.forEach((w, k) => {
+      if (mode === "exam") {
+        html += `<td><input id="v${i}-${k}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${es}, forma ${k + 1}" data-answer="${w}"></td>`;
+      } else {
+        html += `<td class="en" tabindex="${mode === "cover" ? 0 : -1}"><span class="word">${w}</span></td>`;
+      }
+    });
+    tr.innerHTML = html;
+    rowsEl.appendChild(tr);
+  }
+  renderActions();
+}
+
+function renderActions() {
+  if (mode === "study") {
+    actionsEl.innerHTML = "";
+  } else if (mode === "cover") {
+    actionsEl.innerHTML = `<button class="btn" id="reveal-all">Destapar todo</button><button class="btn" id="cover-all">Volver a tapar</button><button class="btn" id="shuffle">Mezclar orden</button>`;
+  } else {
+    actionsEl.innerHTML = `<button class="btn primary" id="check">Corregir</button><button class="btn" id="retry">Borrar y repetir</button><button class="btn" id="shuffle">Mezclar orden</button><span class="score" id="score" aria-live="polite"></span>`;
+  }
+}
+
+function check() {
+  const inputs = rowsEl.querySelectorAll("input");
+  let right = 0;
+  inputs.forEach(inp => {
+    const ok = norm(inp.value) === norm(inp.dataset.answer);
+    inp.classList.toggle("right", ok);
+    inp.classList.toggle("wrong", !ok);
+    const old = inp.parentElement.querySelector(".fix");
+    if (old) old.remove();
+    if (ok) right++;
+    else inp.insertAdjacentHTML("afterend", `<span class="fix">${inp.dataset.answer}</span>`);
+  });
+  const score = document.getElementById("score");
+  score.textContent = `${right} / ${inputs.length} bien`;
+  score.className = "score " + (right / inputs.length >= 0.8 ? "good" : "meh");
+}
+
+function press(container, attr, value) {
+  container.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset[attr] === value)));
+}
+
+document.getElementById("sides").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  side = b.dataset.s; press(e.currentTarget, "s", side); render();
+});
+document.getElementById("groups").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  group = b.dataset.g; press(e.currentTarget, "g", group); render();
+});
+document.getElementById("modes").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  mode = b.dataset.m; press(e.currentTarget, "m", mode); render();
+});
+
+function toggleCell(td) { if (mode === "cover" && td) td.classList.toggle("shown"); }
+rowsEl.addEventListener("click", e => toggleCell(e.target.closest("td.en")));
+rowsEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.tagName === "INPUT") {
+    const all = [...rowsEl.querySelectorAll("input")];
+    const next = all[all.indexOf(e.target) + 1];
+    next ? next.focus() : check();
+  } else if ((e.key === "Enter" || e.key === " ") && e.target.matches("td.en")) {
+    e.preventDefault(); toggleCell(e.target);
+  }
+});
+
+actionsEl.addEventListener("click", e => {
+  const id = e.target.id;
+  if (id === "reveal-all") rowsEl.querySelectorAll("td.en").forEach(td => td.classList.add("shown"));
+  if (id === "cover-all") rowsEl.querySelectorAll("td.en").forEach(td => td.classList.remove("shown"));
+  if (id === "check") check();
+  if (id === "retry") render();
+  if (id === "shuffle") {
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
