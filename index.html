@@ -88,6 +88,27 @@ td input.wrong { border-bottom-color: var(--bad); background: var(--bad-soft); c
 .traps ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
 .traps em { font: 600 21px var(--f-hand); color: var(--pen); font-style: normal; }
 @media (prefers-reduced-motion: no-preference) { td input, .btn { transition: background .15s, border-color .15s; } }
+
+/* Móvil: cada verbo pasa a ser una tarjeta (español arriba, las tres formas debajo) para no tener que deslizar de lado */
+@media (max-width: 600px) {
+  .wrap { padding-block: 20px 40px; gap: 16px; }
+  .controls { gap: 10px; }
+  .controls > div { display: grid; gap: 4px; width: 100%; }
+  .seg { display: flex; width: 100%; }
+  .seg button { flex: 1; padding: 10px 6px; }
+  table { min-width: 0; }
+  thead { display: none; }
+  tbody tr { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+  tbody tr:last-child { border-bottom: 0; }
+  td { border: 0; padding: 4px 2px; height: auto; min-width: 0; }
+  td.es { grid-column: 1 / -1; width: auto; padding-bottom: 2px; }
+  td[data-label]::before { content: attr(data-label); display: block; font: 700 10px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  td.en { font-size: 24px; min-height: 48px; }
+  td input { font-size: 22px; padding: 6px 2px; }
+  .fix { font-size: 18px; }
+  .actions .btn { flex: 1 1 auto; padding: 12px 14px; }
+  .actions .score { width: 100%; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -233,6 +254,8 @@ const TIPS = {
   },
 };
 
+const LABELS = ["Infinitive", "Past", "Participle"];
+
 let side = "2";
 let group = "all";
 let mode = "study";
@@ -262,10 +285,11 @@ function render() {
     const tr = document.createElement("tr");
     let html = `<td class="es">${es}</td>`;
     en.forEach((w, k) => {
+      const label = LABELS[k];
       if (mode === "exam") {
-        html += `<td><input id="v${i}-${k}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${es}, forma ${k + 1}" data-answer="${w}"></td>`;
+        html += `<td data-label="${label}"><input id="v${i}-${k}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-label="${es}, ${label}" data-answer="${w}"></td>`;
       } else {
-        html += `<td class="en" tabindex="${mode === "cover" ? 0 : -1}"><span class="word">${w}</span></td>`;
+        html += `<td class="en" data-label="${label}" tabindex="${mode === "cover" ? 0 : -1}"><span class="word">${w}</span></td>`;
       }
     });
     tr.innerHTML = html;
